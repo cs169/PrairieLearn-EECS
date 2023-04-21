@@ -11,11 +11,11 @@
     <% end %>
 </div>
 
-
 <script>
-//styling
 $(".draggable-question").css('text-align','left').draggable({
     helper: "clone",
+    connectToSortable: ".mcontainer",
     revert: "invalid"
 });
+
 </script>
