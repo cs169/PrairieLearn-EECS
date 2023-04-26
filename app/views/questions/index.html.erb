@@ -36,6 +36,11 @@
             <button class="btn btn-primary" type="button" id="export">Export</button>
             <a id="downloadAnchorElem" style="display:none"></a>
           </li>
+          <li class="nav-item mx-1">
+            <input type="file" id="import" accept=".json" style="display:none;" />
+            <input type="button" id="import_back" class="btn btn-primary" value="Import"/>
+        </form>
+          </li>
         </ul>
       </div>
     </nav>
@@ -57,7 +62,7 @@
             </div>
             <div class="col-md-5 mb-3">
               <label class='question_title'>Credit:</label>
-              <input class="form-control" type="text" placeholder="Enter integer" name="credit" size=4>
+              <input class="form-control" type="text" placeholder="Enter integer" name="credit" id="credit" size=4>
             </div>
           </div>
           <div class="form-row">
@@ -177,6 +182,29 @@
       });
     }
 
+    document.querySelector('#import_back').addEventListener('click', event => {
+      document.getElementById('import').click();
+    });
+
+
+    
+    document.querySelector('#import').addEventListener('change', event => {
+      const fileList = event.target.files;
+      readJSON(fileList[0]);
+    });
+
+    function readJSON(file) {
+      const reader = new FileReader();
+      reader.addEventListener('load', (event) => {
+        let result = event.target.result;
+        //Result contains obtained JSON file
+        result = JSON.parse(result);
+        retrieve_data(result, true);
+      });
+      reader.readAsText(file);   
+    }
+
+  
     $(document).ready(function(){
       // trigger export
       $('#export').click(function(){
@@ -221,7 +249,7 @@
           if (!(midZones.length == 1 && 
               midZones[0].querySelector("#zone_title").value == "" &&
               midZones[0].querySelector("#zone_comment").value == "" &&
-              midZones[0].querySelectorAll('.draggable-question[type="outter"]').length == 0)) {
+              midZones[0].querySelectorAll('.draggable-question[type="outer"]').length == 0)) {
             jsonData.zones = [];
             for (let i = 0; i < midZones.length; i++) {
               jsonData.zones.push({
@@ -229,7 +257,7 @@
                 comment: midZones[i].querySelector("#zone_comment").value,
                 questions: []
               });
-              const midQuestions = midZones[i].querySelectorAll('.draggable-question[type="outter"]');
+              const midQuestions = midZones[i].querySelectorAll('.draggable-question[type="outer"]');
               for (let j = 0; j < midQuestions.length; j++) {
                 const alternatives = midQuestions[j].querySelectorAll('.draggable-question[type="inner"]');
                 if (alternatives.length > 0) {
