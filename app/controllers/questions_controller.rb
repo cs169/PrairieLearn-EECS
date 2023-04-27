@@ -7,7 +7,7 @@ class QuestionsController < ApplicationController
 	def search
 		@questions = find_user_repo
 		@search_terms = params[:search]
-		@questions = @questions.where("title ILIKE :search_terms OR descriptivetitle ILIKE :search_terms", search_terms: Question.sanitize_sql_like(params[:search]) + "%")
+		@questions = @questions.where("title ILIKE :search_terms OR descriptivetitle ILIKE :search_terms", search_terms: "%" + Question.sanitize_sql_like(params[:search]) + "%")
 		respond_to do |format|
 			format.html { render partial: 'search_questions' }
 		end
